@@ -1,0 +1,16 @@
+body
+{
+    padding: 0px !important;
+}
+
+#app
+{
+
+}
+
+#category-manager
+{
+    background-color: #cccccc;
+    padding: 10px;
+    min-height: 100%;
+}

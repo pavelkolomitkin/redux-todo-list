@@ -7,40 +7,41 @@ class TaskStatusForm extends React.Component
         super(props, context);
 
         this.onStatusChange = this.onStatusChange.bind(this);
-        this.getStatusOption = this.getStatusOption.bind(this);
+
+        const {task, statuses} = this.props;
+        if (!task.status)
+        {
+            task.status = statuses[0];
+        }
 
         this.state = {
-            task: this.props.task
+            task: task
         };
 
     }
 
     onStatusChange(event)
     {
-        this.state.task.status = {id : event.target.value, title: event.target.innerHTML};
-    }
+        const task = this.state.task;
+        task.status = this.props.statuses.filter((status) => {return status.id == event.target.value})[0];
 
-    getStatusOption(status, index)
-    {
-        const currentStatus = this.state.task.status;
-
-        if (currentStatus && currentStatus.id == status.id)
-        {
-            return (<option key={status.id} value={status.id} selected="selected">{status.title}</option>);
-        }
-        else
-        {
-            return (<option key={status.id} value={status.id}>{status.title}</option>);
-        }
+        this.setState(
+            {
+                task: task
+            }
+        );
     }
 
     render()
     {
         const {statuses} = this.props;
+        const {task} = this.state;
 
         return (
-            <select onChange={this.onStatusChange}>
-                {statuses.map(this.getStatusOption)}
+            <select onChange={this.onStatusChange} defaultValue={task.status.id}>
+                {statuses.map((status, index) => {
+                    return (<option key={status.id} value={status.id}>{status.title}</option>);
+                })}
             </select>
         );
     }

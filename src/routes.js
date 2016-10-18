@@ -4,6 +4,7 @@ import App from './components/App';
 import TaskListPage from './components/task/TaskListPage';
 import CreateTaskPage from './components/task/CreateTaskPage';
 import EditTaskPage from './components/task/EditTaskPage';
+import ShowTaskPage from './components/task/ShowTaskPage';
 
 export default (
     <Route path="/" component={App}>
@@ -11,5 +12,6 @@ export default (
         <Route path="/:categoryId" component={TaskListPage} />
         <Route path="/:categoryId/task/new" component={CreateTaskPage} />
         <Route path="/:categoryId/task/:id/edit" component={EditTaskPage}/>
+        <Route path="/:categoryId/task/:id/show" component={ShowTaskPage}/>
     </Route>
 );

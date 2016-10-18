@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import TaskItem from './TaskItem';
+import TaskListItem from './TaskListItem';
 
 class TaskList extends React.Component
 {
@@ -12,7 +12,7 @@ class TaskList extends React.Component
             return (
                 <div>
                     {tasks.map(function (task, index) {
-                        return <TaskItem task={task} key={task.id} />
+                        return <TaskListItem task={task} key={task.id} />
                     })}
                 </div>
             );

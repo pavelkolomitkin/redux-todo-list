@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import TaskStatusForm from './TaskStatusForm';
 import TaskItemCollectionForm from './TaskItemCollectionForm';
 
@@ -8,7 +9,6 @@ class TaskForm extends React.Component {
     {
         super(state, context);
 
-        this.onTitleChange = this.onTitleChange.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
 
         this.state = {
@@ -16,16 +16,20 @@ class TaskForm extends React.Component {
         };
     }
 
-    onTitleChange(event)
-    {
-        this.state.task.title = event.target.value;
-    }
-
     formSubmit(event)
     {
         event.preventDefault();
-        this.state.task.category = this.props.category;
-        this.props.onFormSubmit(this.state.task);
+
+        const task = Object.assign(
+            {},
+            this.state.task,
+            {
+                title: ReactDOM.findDOMNode(this.refs.taskTitle).value,
+                category: this.props.category,
+            }
+        );
+
+        this.props.onFormSubmit(task);
     }
 
     render()
@@ -36,8 +40,12 @@ class TaskForm extends React.Component {
             <div>
                 <form onSubmit={this.formSubmit}>
                     <div className="form-group">
+                        <label>Category: </label>
+                        <b>{category.title}</b>
+                    </div>
+                    <div className="form-group">
                         <label>Title</label>
-                        <input type="text" onChange={this.onTitleChange} />
+                        <input type="text" ref="taskTitle" defaultValue={task.title} />
                     </div>
                     <div className="form-group">
                         <label>Status</label>

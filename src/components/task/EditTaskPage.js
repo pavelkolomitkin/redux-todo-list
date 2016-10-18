@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import TaskForm from './form/TaskForm';
 import {bindActionCreators} from 'redux';
 import * as taskActions from '../../actions/taskActions';
-
 import {browserHistory} from 'react-router';
 
-class CreateTaskPage extends React.Component
+class EditTaskPage extends React.Component
 {
     constructor(props, context)
     {
@@ -17,42 +16,37 @@ class CreateTaskPage extends React.Component
 
     onFormSubmit(task)
     {
-        task.id = +new Date;
-        this.props.actions.addTask(task);
+        this.props.actions.editTask(task);
         browserHistory.push(`/${task.category.id}`);
     }
 
     render()
     {
-        const {category, taskStatuses, task} = this.props;
+        const {task, taskStatuses} = this.props;
 
         return (
             <div>
-                <h1>Create new task!</h1>
-                <TaskForm task={task} category={category} statuses={taskStatuses} onFormSubmit={this.onFormSubmit} />
+                <h1>Edit task</h1>
+                <TaskForm task={task} category={task.category} statuses={taskStatuses} onFormSubmit={this.onFormSubmit} />
             </div>
         );
     }
 }
 
-CreateTaskPage.propTypes = {
-    category: PropTypes.object.isRequired,
+EditTaskPage.propTypes = {
+    task: PropTypes.object.isRequired,
     taskStatuses: PropTypes.array.isRequired
 };
 
-function mapStateToProps(state, {params: {categoryId}}) {
+function mapStateToProps(state, {params: {categoryId, id}}) {
 
-    const category = state.categories.filter(function (category) {
-        return category.id == categoryId
+    const task = state.tasks.filter(function(task, index){
+        return (task.id == id && task.category.id == categoryId);
     })[0];
 
     return {
-        category: category,
-        taskStatuses: state.taskStatuses,
-        task: {
-            title: '',
-            items: []
-        }
+        task: task,
+        taskStatuses: state.taskStatuses
     };
 }
 
@@ -62,4 +56,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateTaskPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EditTaskPage);

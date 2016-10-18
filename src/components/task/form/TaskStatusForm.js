@@ -6,39 +6,40 @@ class TaskStatusForm extends React.Component
     {
         super(props, context);
 
-        this.onStatusChange = this.onStatusChange.bind(this);
+        this.onStatusChangeHandler = this.onStatusChangeHandler.bind(this);
 
-        const {task, statuses} = this.props;
-        if (!task.status)
+        let {currentStatus, statuses} = this.props;
+        if (!currentStatus)
         {
-            task.status = statuses[0];
+            currentStatus = statuses[0];
         }
 
         this.state = {
-            task: task
+            currentStatus
         };
 
     }
 
-    onStatusChange(event)
+    onStatusChangeHandler(event)
     {
-        const task = this.state.task;
-        task.status = this.props.statuses.filter((status) => {return status.id == event.target.value})[0];
+        const newStatus = this.props.statuses.filter((status) => { return status.id == event.target.value })[0];
 
         this.setState(
             {
-                task: task
+                currentStatus: newStatus
             }
         );
+
+        this.props.onStatusChange(newStatus);
     }
 
     render()
     {
         const {statuses} = this.props;
-        const {task} = this.state;
+        const {currentStatus} = this.state;
 
         return (
-            <select onChange={this.onStatusChange} defaultValue={task.status.id}>
+            <select onChange={this.onStatusChangeHandler} defaultValue={currentStatus.id}>
                 {statuses.map((status, index) => {
                     return (<option key={status.id} value={status.id}>{status.title}</option>);
                 })}
@@ -49,7 +50,7 @@ class TaskStatusForm extends React.Component
 
 TaskStatusForm.propTypes = {
     statuses: PropTypes.array.isRequired,
-    task: PropTypes.object.isRequired
+    onStatusChange: PropTypes.func.isRequired
 };
 
 export default TaskStatusForm;

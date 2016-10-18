@@ -7,8 +7,7 @@ class TaskItem extends React.Component
         super(props, context);
 
         this.state = {
-            item: this.props.item,
-            isItemComplete: !!this.props.item.isComplete
+            item: this.props.item
         };
 
         this.onInputBlur = this.onInputBlur.bind(this);
@@ -43,21 +42,28 @@ class TaskItem extends React.Component
 
         this.setState(
             {
-                item: item
+                item
             }
         );
+
+        this.props.onItemEdit(item);
     }
 
     onCheckboxStateChange(event)
     {
+        const {item} = this.state;
+        item.isComplete = event.target.checked;
+
         this.setState({
-            isItemComplete: event.target.checked
+            item
         });
+
+        this.props.onItemEdit(item);
     }
 
     getItemBody()
     {
-        const {isEdit, item, isItemComplete} = this.state;
+        const {isEdit, item} = this.state;
 
         if (isEdit)
         {
@@ -69,7 +75,7 @@ class TaskItem extends React.Component
         {
             return (
                 <span>
-                    <span style={{textDecoration: isItemComplete && 'line-through'}}>{item.title}</span>
+                    <span style={{textDecoration: item.isComplete && 'line-through'}}>{item.title}</span>
                     <span className="btn btn-default" onClick={this.onEditClick}>Edit</span>
                 </span>
             );
@@ -78,10 +84,12 @@ class TaskItem extends React.Component
 
     render()
     {
+        const {item} = this.state;
+
         return (
             <div>
                 <label>
-                    <input type="checkbox" onChange={this.onCheckboxStateChange} />
+                    <input type="checkbox" checked={item.isComplete} onChange={this.onCheckboxStateChange} />
                     {this.getItemBody()}
                 </label>
 
@@ -91,7 +99,8 @@ class TaskItem extends React.Component
 }
 
 TaskItem.propTypes = {
-    item: PropTypes.object.isRequired
+    item: PropTypes.object.isRequired,
+    onItemEdit: PropTypes.func.isRequired
 };
 
 export default TaskItem;

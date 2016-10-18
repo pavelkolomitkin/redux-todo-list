@@ -14,3 +14,7 @@ export function editTask(task)
 {
     return { type: types.TASK_EDIT, task };
 }
+
+export function editTaskItem(task, item) {
+    return { type: types.TASK_ITEM_EDIT, task, item };
+}

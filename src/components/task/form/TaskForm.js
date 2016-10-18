@@ -10,9 +10,12 @@ class TaskForm extends React.Component {
         super(state, context);
 
         this.formSubmit = this.formSubmit.bind(this);
+        this.onTaskStatusChange = this.onTaskStatusChange.bind(this);
 
         this.state = {
-            task: this.props.task
+            task: this.props.task,
+            category: this.props.category,
+            status: this.props.task.status ? this.props.task.status : null
         };
     }
 
@@ -26,15 +29,26 @@ class TaskForm extends React.Component {
             {
                 title: ReactDOM.findDOMNode(this.refs.taskTitle).value,
                 category: this.props.category,
+                status: this.state.status
             }
         );
 
         this.props.onFormSubmit(task);
     }
 
+    onTaskStatusChange(status)
+    {
+        this.setState(
+            {
+                status
+            }
+        );
+    }
+
     render()
     {
-        const {category, statuses, task} = this.props;
+        const {category, status, task} = this.state;
+        const { statuses } = this.props;
 
         return (
             <div>
@@ -49,7 +63,7 @@ class TaskForm extends React.Component {
                     </div>
                     <div className="form-group">
                         <label>Status</label>
-                        <TaskStatusForm task={task} statuses={statuses} />
+                        <TaskStatusForm currentStatus={status} statuses={statuses} onStatusChange={this.onTaskStatusChange} />
                     </div>
                     <div className="form-group">
                         <TaskItemCollectionForm task={task} />

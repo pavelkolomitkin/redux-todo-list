@@ -11,6 +11,15 @@ export default function (state, action)
                 Object.assign({}, action.task)
             ];
 
+        case types.TASK_EDIT:
+            return action.task;
+
+        case types.TASK_DELETE:
+
+            return [
+                ...state.filter((currentTask) => { return currentTask.id != action.task.id; })
+            ];
+
         default:
             return state || [];
     }

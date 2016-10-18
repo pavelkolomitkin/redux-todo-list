@@ -1,11 +1,28 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
-
+import {bindActionCreators} from 'redux';
+import * as actions from '../../actions/taskActions';
 import TaskList from './TaskList';
+import {browserHistory} from 'react-router';
+
+
 
 class TaskListPage extends React.Component
 {
+    constructor(props, context)
+    {
+        super(props, context);
+
+        this.onTaskDelete = this.onTaskDelete.bind(this);
+    }
+
+    onTaskDelete(task)
+    {
+        this.props.actions.deleteTask(task);
+        browserHistory.push('/');
+    }
+
     getHeader()
     {
         const {category} = this.props;
@@ -32,14 +49,15 @@ class TaskListPage extends React.Component
                 { category &&
                     <Link to={`/${category.id}/task/new`} className="btn btn-primary">+ Add task</Link>
                 }
-                <TaskList tasks={tasks} />
+                <TaskList tasks={tasks} onDelete={this.onTaskDelete} />
             </div>
         );
     }
 }
 
 TaskListPage.propTypes = {
-    tasks: PropTypes.array.isRequired
+    tasks: PropTypes.array.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, {params: {categoryId}})
@@ -62,4 +80,10 @@ function mapStateToProps(state, {params: {categoryId}})
     };
 }
 
-export default connect(mapStateToProps)(TaskListPage);
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(actions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskListPage);

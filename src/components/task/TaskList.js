@@ -5,14 +5,14 @@ import TaskListItem from './TaskListItem';
 class TaskList extends React.Component
 {
     render() {
-        const {tasks} = this.props;
+        const {tasks, onDelete} = this.props;
 
         if (tasks.length > 0)
         {
             return (
                 <div>
                     {tasks.map(function (task, index) {
-                        return <TaskListItem task={task} key={task.id} />
+                        return <TaskListItem task={task} key={task.id} onDelete={onDelete} />
                     })}
                 </div>
             );
@@ -31,7 +31,8 @@ class TaskList extends React.Component
 }
 
 TaskList.propTypes = {
-    tasks: PropTypes.array.isRequired
+    tasks: PropTypes.array.isRequired,
+    onDelete: PropTypes.func.isRequired
 };
 
 

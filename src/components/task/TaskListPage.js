@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../actions/taskActions';
 import TaskList from './TaskList';
+import SearchFilters from './form/SearchFilters';
 import {browserHistory} from 'react-router';
 
 
@@ -15,12 +16,19 @@ class TaskListPage extends React.Component
         super(props, context);
 
         this.onTaskDelete = this.onTaskDelete.bind(this);
+        this.onSearchFilterChange = this.onSearchFilterChange.bind(this);
     }
 
     onTaskDelete(task)
     {
         this.props.actions.deleteTask(task);
         browserHistory.push('/');
+    }
+
+    onSearchFilterChange(params)
+    {
+        //this.props.actions.searchTasks(params);
+        this.setState(params);
     }
 
     getHeader()
@@ -42,13 +50,14 @@ class TaskListPage extends React.Component
 
     render()
     {
-        const { tasks, category } = this.props;
+        const { tasks, category, statuses } = this.props;
         return (
             <div>
                 { this.getHeader() }
                 { category &&
                     <Link to={`/${category.id}/task/new`} className="btn btn-primary">+ Add task</Link>
                 }
+                <SearchFilters statuses={statuses} onFilterChange={this.onSearchFilterChange}/>
                 <TaskList tasks={tasks} onDelete={this.onTaskDelete} />
             </div>
         );
@@ -57,7 +66,8 @@ class TaskListPage extends React.Component
 
 TaskListPage.propTypes = {
     tasks: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    statuses: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state, {params: {categoryId}})
@@ -76,7 +86,8 @@ function mapStateToProps(state, {params: {categoryId}})
 
     return {
         tasks,
-        category
+        category,
+        statuses: [{id: '', title: 'All'}, ...state.taskStatuses]
     };
 }
 

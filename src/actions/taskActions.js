@@ -18,3 +18,7 @@ export function editTask(task)
 export function editTaskItem(task, item) {
     return { type: types.TASK_ITEM_EDIT, task, item };
 }
+
+export function searchTasks(params) {
+    return { type: types.TASK_SEARCH, params };
+}

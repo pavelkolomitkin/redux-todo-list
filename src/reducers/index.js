@@ -5,8 +5,8 @@ import taskStatuses from './taskStatusReducer';
 
 const rootReducer = combineReducers(
     {
-        categories: categories,
-        tasks: tasks,
+        categories,
+        tasks,
         taskStatuses
     }
 );

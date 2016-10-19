@@ -32,6 +32,23 @@ export default function (state, action)
                 Object.assign({}, task)
             ];
 
+        case types.TASK_SEARCH:
+
+            let {text, status} = action.params;
+            let result = state;
+
+            if (text != '')
+            {
+                result = result.filter((task) => { return task.title.indexOf(text) >= 0; });
+            }
+
+            if (status && status.id != '')
+            {
+                result = result.filter((task) => { return task.status.id == status.id; });
+            }
+
+            return result;
+
         default:
             return state || [];
     }
